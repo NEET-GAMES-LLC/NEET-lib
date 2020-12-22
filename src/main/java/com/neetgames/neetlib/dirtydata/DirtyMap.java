@@ -37,6 +37,7 @@ public class DirtyMap<K, V> implements Map<K, V>, Dirty {
 
     /**
      * Change the map contained in this wrapper
+     *
      * @param dataMap the map to wrap around instead of the current map
      */
     public void setMap(@NotNull Map<K, V> dataMap) {
@@ -46,10 +47,10 @@ public class DirtyMap<K, V> implements Map<K, V>, Dirty {
 
     /**
      * Get the inner map that this DirtyMap is wrapping
+     *
      * @return the inner map of this DirtyMap
      */
     public @NotNull Map<K, V> unwrapMap() {
-        setDirty();
         return map;
     }
 
@@ -106,19 +107,16 @@ public class DirtyMap<K, V> implements Map<K, V>, Dirty {
 
     @Override
     public @NotNull Set<K> keySet() {
-        setDirty();
         return map.keySet();
     }
 
     @Override
     public @NotNull Collection<V> values() {
-        setDirty();
         return map.values();
     }
 
     @Override
     public @NotNull Set<Entry<K, V>> entrySet() {
-        setDirty();
         return map.entrySet();
     }
 
@@ -129,7 +127,6 @@ public class DirtyMap<K, V> implements Map<K, V>, Dirty {
 
     @Override
     public void forEach(BiConsumer<? super K, ? super V> action) {
-        setDirty();
         map.forEach(action);
     }
 
