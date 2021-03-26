@@ -35,6 +35,21 @@
             <artifactId>guava</artifactId>
             <version>29.0-jre</version>
         </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.8.0-M1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.0-M1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--        testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")-->
+<!--        testImplementation("org.junit.jupiter:junit-jupiter-engine:5.7.1")-->
     </dependencies>
 
 </project>
