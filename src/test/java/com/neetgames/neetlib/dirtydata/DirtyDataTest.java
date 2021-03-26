@@ -51,7 +51,7 @@ class DirtyDataTest {
     }
 
     @Test
-    void setData() {
+    void testSetData() {
         DirtyData<Person> dirtyDataPerson = new DirtyData<>(robert);
         Person tommy = new Person("Tommy", 33);
 

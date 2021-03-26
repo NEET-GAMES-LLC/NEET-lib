@@ -25,7 +25,7 @@ class MutableBooleanTest {
     }
 
     @Test
-    void getImmutableCopy() {
+    void testGetImmutableCopy() {
         BooleanHolder booleanHolder = new BooleanHolder(mutableBoolean);
         boolean shouldBeFalse = mutableBoolean.getImmutableCopy();
         assertFalse(shouldBeFalse);
@@ -35,7 +35,7 @@ class MutableBooleanTest {
     }
 
     @Test
-    void setBoolean() {
+    void testSetBoolean() {
         MutableBoolean falseBoolean = new MutableBoolean(false);
         assertFalse(falseBoolean.getImmutableCopy());
         falseBoolean.setBoolean(true);
