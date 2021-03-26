@@ -14,26 +14,26 @@ import java.util.stream.Stream;
 
 public class DirtySet<E> implements Set<E>, Dirty {
 
-    private final @NotNull MutableBoolean dirtyFlag; //Can be pointed at a reference
+    private boolean dirtyFlag; //Can be pointed at a reference
     private @NotNull Set<E> set;
 
     public DirtySet(@NotNull Set<E> data, @NotNull MutableBoolean referenceFlag) {
         this.set = data;
-        this.dirtyFlag = referenceFlag;
+        this.dirtyFlag = false;
     }
 
     @Override
     public boolean isDirty() {
-        return dirtyFlag.getImmutableCopy();
+        return dirtyFlag;
     }
 
     @Override
-    public void setDirty(boolean bool) {
-        dirtyFlag.setBoolean(bool);
+    public void resetDirty() {
+        this.dirtyFlag = false;
     }
 
     private void setDirty() {
-        setDirty(true);
+        this.dirtyFlag = true;
     }
 
     /**

@@ -1,44 +1,37 @@
 package com.neetgames.neetlib.dirtydata;
 
 import com.google.common.base.Objects;
-import com.neetgames.neetlib.mutableprimitives.MutableBoolean;
 import org.jetbrains.annotations.NotNull;
 
 public class DirtyData<T> implements Dirty {
 
-    private final @NotNull MutableBoolean dirtyFlag; //Can be pointed at a reference
     private @NotNull T data;
+    private int dataHash;
 
-
-    public DirtyData(@NotNull T data, @NotNull MutableBoolean referenceFlag) {
+    public DirtyData(@NotNull T data) {
         this.data = data;
-        this.dirtyFlag = referenceFlag;
+        resetDataHash(data);
+    }
+
+    private void resetDataHash(@NotNull T data) {
+        dataHash = data.hashCode();
     }
 
     public boolean isDirty() {
-        return dirtyFlag.getImmutableCopy();
+        return dataHash != data.hashCode();
     }
 
-    public void setDirty(boolean newDirtyValue) {
-        dirtyFlag.setBoolean(newDirtyValue);
-    }
-
-    public void setDirty() {
-        setDirty(true);
+    public void resetDirty() {
+        resetDataHash(data);
     }
 
     public @NotNull T getData() {
         return data;
     }
 
-    public T getData(boolean newDirty) {
-        setDirty(newDirty);
-        return data;
-    }
-
     public void setData(@NotNull T data) {
         this.data = data;
-        setDirty(true);
+        resetDataHash(data);
     }
 
     @Override

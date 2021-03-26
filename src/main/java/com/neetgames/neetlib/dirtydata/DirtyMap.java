@@ -1,7 +1,6 @@
 package com.neetgames.neetlib.dirtydata;
 
 import com.google.common.base.Objects;
-import com.neetgames.neetlib.mutableprimitives.MutableBoolean;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -13,26 +12,26 @@ import java.util.function.Function;
 
 public class DirtyMap<K, V> implements Map<K, V>, Dirty {
 
-    private final @NotNull MutableBoolean dirtyFlag; //Can be pointed at a reference
+    private boolean dirtyFlag; //Can be pointed at a reference
     private @NotNull Map<K, V> map;
 
-    public DirtyMap(@NotNull Map<K, V> data, @NotNull MutableBoolean referenceFlag) {
+    public DirtyMap(@NotNull Map<K, V> data) {
         this.map = data;
-        this.dirtyFlag = referenceFlag;
+        this.dirtyFlag = false;
     }
 
     @Override
     public boolean isDirty() {
-        return dirtyFlag.getImmutableCopy();
+        return dirtyFlag;
     }
 
     @Override
-    public void setDirty(boolean bool) {
-        dirtyFlag.setBoolean(bool);
+    public void resetDirty() {
+        this.dirtyFlag = false;
     }
 
-    private void setDirty() {
-        setDirty(true);
+    public void setDirty() {
+        this.dirtyFlag = true;
     }
 
     /**

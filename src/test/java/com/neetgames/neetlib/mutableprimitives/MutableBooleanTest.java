@@ -13,6 +13,7 @@ class MutableBooleanTest {
 
     @BeforeEach
     void setUp() {
+        System.out.println("Setting up mutable boolean");
         assertNull(mutableBoolean);
         mutableBoolean = new MutableBoolean(false);
         assertFalse(mutableBoolean.getImmutableCopy()); //Should always be false at this point
