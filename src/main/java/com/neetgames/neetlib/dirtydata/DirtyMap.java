@@ -12,26 +12,22 @@ import java.util.function.Function;
 
 public class DirtyMap<K, V> implements Map<K, V>, Dirty {
 
-    private boolean dirtyFlag; //Can be pointed at a reference
     private @NotNull Map<K, V> map;
+    private int dataHashCache;
 
     public DirtyMap(@NotNull Map<K, V> data) {
         this.map = data;
-        this.dirtyFlag = false;
+        this.dataHashCache = data.hashCode();
     }
 
     @Override
     public boolean isDirty() {
-        return dirtyFlag;
+        return dataHashCache != unwrapMap().hashCode();
     }
 
     @Override
     public void resetDirty() {
-        this.dirtyFlag = false;
-    }
-
-    public void setDirty() {
-        this.dirtyFlag = true;
+        resetHashCache();
     }
 
     /**
@@ -41,7 +37,6 @@ public class DirtyMap<K, V> implements Map<K, V>, Dirty {
      */
     public void setMap(@NotNull Map<K, V> dataMap) {
         this.map = dataMap;
-        setDirty();
     }
 
     /**
@@ -82,25 +77,21 @@ public class DirtyMap<K, V> implements Map<K, V>, Dirty {
 
     @Override
     public V put(K key, V value) {
-        setDirty();
         return map.put(key, value);
     }
 
     @Override
     public V remove(Object key) {
-        setDirty();
         return map.remove(key);
     }
 
     @Override
     public void putAll(@NotNull Map<? extends K, ? extends V> m) {
-        setDirty();
         map.putAll(m);
     }
 
     @Override
     public void clear() {
-        setDirty();
         map.clear();
     }
 
@@ -131,70 +122,63 @@ public class DirtyMap<K, V> implements Map<K, V>, Dirty {
 
     @Override
     public void replaceAll(BiFunction<? super K, ? super V, ? extends V> function) {
-        setDirty();
         map.replaceAll(function);
     }
 
     @Override
     public V putIfAbsent(K key, V value) {
-        setDirty();
         return map.putIfAbsent(key, value);
     }
 
     @Override
     public boolean remove(Object key, Object value) {
-        setDirty();
         return map.remove(key, value);
     }
 
     @Override
     public boolean replace(K key, V oldValue, V newValue) {
-        setDirty();
         return map.replace(key, oldValue, newValue);
     }
 
     @Override
     public V replace(K key, V value) {
-        setDirty();
         return map.replace(key, value);
     }
 
     @Override
     public V computeIfAbsent(K key, @NotNull Function<? super K, ? extends V> mappingFunction) {
-        setDirty();
         return map.computeIfAbsent(key, mappingFunction);
     }
 
     @Override
     public V computeIfPresent(K key, @NotNull BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
-        setDirty();
         return map.computeIfPresent(key, remappingFunction);
     }
 
     @Override
     public V compute(K key, @NotNull BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
-        setDirty();
         return map.compute(key, remappingFunction);
     }
 
     @Override
     public V merge(K key, @NotNull V value, @NotNull BiFunction<? super V, ? super V, ? extends V> remappingFunction) {
-        setDirty();
         return map.merge(key, value, remappingFunction);
     }
 
-    /* Override for equals and hash */
+    private void resetHashCache() {
+        dataHashCache = unwrapMap().hashCode();
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DirtyMap<?, ?> that = (DirtyMap<?, ?>) o;
-        return Objects.equal(map, that.map);
+        DirtyMap<?, ?> dirtyMap = (DirtyMap<?, ?>) o;
+        return dataHashCache == dirtyMap.dataHashCache && Objects.equal(map, dirtyMap.map);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(map);
+        return Objects.hashCode(map, dataHashCache);
     }
 }

@@ -58,8 +58,12 @@ class DirtyMapTest {
         assertFalse(unalteredDirectory.isDirty());
         assertFalse(creatureDirectory.isDirty());
 
+        int hashBefore = creatureDirectory.unwrapMap().hashCode();
+
         creatureDirectory.put(derpStreet, dave);
         assertTrue(creatureDirectory.isDirty());
+
+        assertNotEquals(hashBefore, creatureDirectory.unwrapMap().hashCode());
 
         creatureDirectory.resetDirty();
         assertFalse(creatureDirectory.isDirty());
