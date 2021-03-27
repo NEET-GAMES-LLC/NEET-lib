@@ -11,10 +11,13 @@ import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//TODO: Test other kinds of maps? Not even sure if necessary
+//TODO: Implement all tests
 class DirtyMapTest {
 
     static DirtyMap<HomeAddress, Creature> creatureDirectory;
     static DirtyMap<HomeAddress, Creature> unalteredDirectory;
+    static DirtyMap<HomeAddress, Creature> modifiedDirtyMap; //Should be dirty before each test
     static Creature futan, mochi, dave; //Name of my cats <3
     static HomeAddress derpStreet, funkyRoad;
 
@@ -45,6 +48,9 @@ class DirtyMapTest {
 
         creatureDirectory = new DirtyMap<>(directoryBeforeDirty); //New registry
         unalteredDirectory = new DirtyMap<>(new HashMap<>());
+
+        modifiedDirtyMap = new DirtyMap<>(new HashMap<>());
+        modifiedDirtyMap.put(new HomeAddress("Unique Street"), new Creature("Unique Creature", 7, 8));
     }
 
     @AfterEach
@@ -57,6 +63,7 @@ class DirtyMapTest {
     void isDirty() {
         assertFalse(unalteredDirectory.isDirty());
         assertFalse(creatureDirectory.isDirty());
+        assertTrue(modifiedDirtyMap.isDirty());
 
         int hashBefore = creatureDirectory.unwrapMap().hashCode();
 
@@ -71,118 +78,9 @@ class DirtyMapTest {
 
     @Test
     void resetDirty() {
-    }
-
-    @Test
-    void setDirty() {
-    }
-
-    @Test
-    void setMap() {
-    }
-
-    @Test
-    void unwrapMap() {
-    }
-
-    @Test
-    void get() {
-    }
-
-    @Test
-    void size() {
-    }
-
-    @Test
-    void isEmpty() {
-    }
-
-    @Test
-    void containsKey() {
-    }
-
-    @Test
-    void containsValue() {
-    }
-
-    @Test
-    void put() {
-    }
-
-    @Test
-    void remove() {
-    }
-
-    @Test
-    void putAll() {
-    }
-
-    @Test
-    void clear() {
-    }
-
-    @Test
-    void keySet() {
-    }
-
-    @Test
-    void values() {
-    }
-
-    @Test
-    void entrySet() {
-    }
-
-    @Test
-    void getOrDefault() {
-    }
-
-    @Test
-    void forEach() {
-    }
-
-    @Test
-    void replaceAll() {
-    }
-
-    @Test
-    void putIfAbsent() {
-    }
-
-    @Test
-    void testRemove() {
-    }
-
-    @Test
-    void replace() {
-    }
-
-    @Test
-    void testReplace() {
-    }
-
-    @Test
-    void computeIfAbsent() {
-    }
-
-    @Test
-    void computeIfPresent() {
-    }
-
-    @Test
-    void compute() {
-    }
-
-    @Test
-    void merge() {
-    }
-
-    @Test
-    void testEquals() {
-    }
-
-    @Test
-    void testHashCode() {
+        assertTrue(modifiedDirtyMap.isDirty());
+        modifiedDirtyMap.resetDirty();
+        assertFalse(modifiedDirtyMap.isDirty());
     }
 
     static class Creature {
