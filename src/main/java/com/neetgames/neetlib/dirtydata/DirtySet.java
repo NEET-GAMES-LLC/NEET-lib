@@ -144,11 +144,11 @@ public class DirtySet<E> implements Set<E>, Dirty {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DirtySet<?> dirtySet = (DirtySet<?>) o;
-        return Objects.equal(data, dirtySet.data);
+        return hashCodeCache == dirtySet.hashCodeCache && Objects.equal(data, dirtySet.data);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(data);
+        return Objects.hashCode(hashCodeCache, data);
     }
 }
