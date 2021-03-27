@@ -39,11 +39,11 @@ public class DirtyData<T> implements Dirty {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DirtyData<?> dirtyData = (DirtyData<?>) o;
-        return Objects.equal(getData(), dirtyData.getData());
+        return dataHash == dirtyData.dataHash && Objects.equal(data, dirtyData.data);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getData());
+        return Objects.hashCode(data, dataHash);
     }
 }
