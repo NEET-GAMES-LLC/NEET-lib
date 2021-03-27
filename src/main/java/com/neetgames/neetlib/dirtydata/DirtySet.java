@@ -1,7 +1,6 @@
 package com.neetgames.neetlib.dirtydata;
 
 import com.google.common.base.Objects;
-import com.neetgames.neetlib.mutableprimitives.MutableBoolean;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -14,26 +13,22 @@ import java.util.stream.Stream;
 
 public class DirtySet<E> implements Set<E>, Dirty {
 
-    private boolean dirtyFlag; //Can be pointed at a reference
-    private @NotNull Set<E> set;
+    private int hashCodeCache;
+    private @NotNull Set<E> data;
 
-    public DirtySet(@NotNull Set<E> data, @NotNull MutableBoolean referenceFlag) {
-        this.set = data;
-        this.dirtyFlag = false;
+    public DirtySet(@NotNull Set<E> data) {
+        this.data = data;
+        this.hashCodeCache = data.hashCode();
     }
 
     @Override
     public boolean isDirty() {
-        return dirtyFlag;
+        return hashCodeCache != data.hashCode();
     }
 
     @Override
     public void resetDirty() {
-        this.dirtyFlag = false;
-    }
-
-    private void setDirty() {
-        this.dirtyFlag = true;
+        this.hashCodeCache = data.hashCode();
     }
 
     /**
@@ -41,8 +36,7 @@ public class DirtySet<E> implements Set<E>, Dirty {
      * @param dataSet the new value to assign the inner wrapped set
      */
     public void setSet(@NotNull Set<E> dataSet) {
-        this.set = dataSet;
-        setDirty();
+        this.data = dataSet;
     }
 
     /**
@@ -50,121 +44,111 @@ public class DirtySet<E> implements Set<E>, Dirty {
      * @return the inner wrapped Set of this DirtySet
      */
     public @NotNull Set<E> unwrapSet() {
-        setDirty();
-        return set;
+        return data;
     }
 
     /* Set Interface Delegates */
 
     @Override
     public int size() {
-        return set.size();
+        return data.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return set.isEmpty();
+        return data.isEmpty();
     }
 
     @Override
     public boolean contains(Object o) {
-        return set.contains(o);
+        return data.contains(o);
     }
 
     @Override
     public @NotNull Iterator<E> iterator() {
-        return set.iterator();
+        return data.iterator();
     }
 
     @Override
     public Object[] toArray() {
-        return set.toArray();
+        return data.toArray();
     }
 
     @Override
     public <T> T[] toArray(@NotNull T[] ts) {
-        return set.toArray(ts);
+        return data.toArray(ts);
     }
 
     @Override
     public boolean add(E e) {
-        setDirty();
-        return set.add(e);
+        return data.add(e);
     }
 
     @Override
     public boolean remove(Object o) {
-        setDirty();
-        return set.remove(o);
+        return data.remove(o);
     }
 
     @Override
     public boolean containsAll(@NotNull Collection<?> collection) {
-        return set.containsAll(collection);
+        return data.containsAll(collection);
     }
 
     @Override
     public boolean addAll(@NotNull Collection<? extends E> collection) {
-        setDirty();
-        return set.addAll(collection);
+        return data.addAll(collection);
     }
 
     @Override
     public boolean retainAll(@NotNull Collection<?> collection) {
-        setDirty();
-        return set.retainAll(collection);
+        return data.retainAll(collection);
     }
 
     @Override
     public boolean removeAll(@NotNull Collection<?> collection) {
-        setDirty();
-        return set.removeAll(collection);
+        return data.removeAll(collection);
     }
 
     @Override
     public void clear() {
-        setDirty();
-        set.clear();
+        data.clear();
     }
 
     @Override
     public Spliterator<E> spliterator() {
-        setDirty();
-        return set.spliterator();
+        return data.spliterator();
     }
 
     @Override
     public boolean removeIf(Predicate<? super E> filter) {
-        return set.removeIf(filter);
+        return data.removeIf(filter);
     }
 
     @Override
     public Stream<E> stream() {
-        return set.stream();
+        return data.stream();
     }
 
     @Override
     public Stream<E> parallelStream() {
-        return set.parallelStream();
+        return data.parallelStream();
     }
 
     @Override
     public void forEach(Consumer<? super E> action) {
-        set.forEach(action);
+        data.forEach(action);
     }
-
-    /* Equals & Hash Overrides */
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DirtySet<?> dirtySet = (DirtySet<?>) o;
-        return Objects.equal(set, dirtySet.set);
+        return Objects.equal(data, dirtySet.data);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(set);
+        return Objects.hashCode(data);
     }
 }
