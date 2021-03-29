@@ -10,7 +10,6 @@ class DirtySetTest {
 
     @BeforeEach
     void setUp() {
-
     }
 
     @AfterEach
